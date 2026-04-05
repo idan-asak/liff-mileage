@@ -77,24 +77,66 @@
             color: #333;
             font-weight: 600;
         }
+        .points-explain {
+            background: #f0f2ff;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .points-explain p {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .points-explain strong {
+            color: #667eea;
+        }
+        .points-breakdown {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .breakdown-item {
+            font-size: 13px;
+            color: #555;
+            font-weight: 600;
+        }
+        .breakdown-plus {
+            font-size: 14px;
+            color: #aaa;
+        }
+        .breakdown-equals {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 700;
+        }
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
         }
         .stat-item {
             background: #f8f9ff;
             border-radius: 12px;
-            padding: 16px;
+            padding: 14px 8px;
             text-align: center;
         }
         .stat-value {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: #333;
         }
-        .stat-label {
+        .stat-unit {
             font-size: 12px;
+            color: #999;
+            font-weight: 400;
+        }
+        .stat-label {
+            font-size: 11px;
             color: #888;
             margin-top: 4px;
         }
@@ -180,23 +222,32 @@
             </div>
 
             <div class="card">
+                <div class="card-header">
+                    <h1>ポイントの内訳</h1>
+                </div>
+                <div class="points-explain">
+                    <p>1日に<strong>いずれかの活動</strong>をすると<strong>1pt</strong><br>（同じ日の複数活動は重複カウントなし）</p>
+                </div>
                 <div class="stats-grid">
                     <div class="stat-item">
-                        <div class="stat-value" id="vcCount">0</div>
+                        <div class="stat-value" id="vcCount">0<span class="stat-unit">回</span></div>
                         <div class="stat-label">VC参加</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="lineCount">0</div>
+                        <div class="stat-value" id="lineCount">0<span class="stat-unit">回</span></div>
                         <div class="stat-label">LINE宣言</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="chatCount">0</div>
-                        <div class="stat-label">チャット投稿</div>
+                        <div class="stat-value" id="chatCount">0<span class="stat-unit">回</span></div>
+                        <div class="stat-label">チャット</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="streakBonus">0</div>
-                        <div class="stat-label">ボーナスpt</div>
-                    </div>
+                </div>
+                <div class="points-breakdown">
+                    <span class="breakdown-item" id="activityDays">活動日数 0日</span>
+                    <span class="breakdown-plus">+</span>
+                    <span class="breakdown-item">ボーナス <span id="streakBonus">0</span>pt</span>
+                    <span class="breakdown-equals">=</span>
+                    <span class="breakdown-item" style="color:#667eea;" id="totalCalc">0pt</span>
                 </div>
             </div>
 
@@ -263,10 +314,12 @@
 
                     document.getElementById("content").style.display = "block";
                     document.getElementById("totalPoints").textContent = data.total_points;
-                    document.getElementById("vcCount").textContent = data.vc_count;
-                    document.getElementById("lineCount").textContent = data.line_count;
-                    document.getElementById("chatCount").textContent = data.chat_count;
+                    document.getElementById("vcCount").innerHTML = data.vc_count + '<span class="stat-unit">回</span>';
+                    document.getElementById("lineCount").innerHTML = data.line_count + '<span class="stat-unit">回</span>';
+                    document.getElementById("chatCount").innerHTML = data.chat_count + '<span class="stat-unit">回</span>';
                     document.getElementById("streakBonus").textContent = data.streak_bonus;
+                    document.getElementById("activityDays").textContent = "活動日数 " + data.activity_days + "日";
+                    document.getElementById("totalCalc").textContent = data.total_points + "pt";
 
                     // 割引表示
                     if (data.current_discount > 0) {
