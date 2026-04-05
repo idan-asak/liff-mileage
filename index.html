@@ -88,9 +88,47 @@
             font-size: 12px;
             color: #666;
             line-height: 1.6;
+            margin: 0;
         }
         .points-explain strong {
             color: #667eea;
+        }
+        .bonus-table {
+            width: 100%;
+            margin-top: 12px;
+            border-collapse: collapse;
+        }
+        .bonus-table th {
+            font-size: 11px;
+            color: #888;
+            font-weight: 600;
+            padding: 4px 8px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .bonus-table td {
+            font-size: 12px;
+            color: #555;
+            padding: 5px 8px;
+            text-align: center;
+        }
+        .bonus-table tr.active-row td {
+            color: #667eea;
+            font-weight: 700;
+            background: #f0f2ff;
+            border-radius: 6px;
+        }
+        .bonus-section {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid #eee;
+        }
+        .bonus-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            text-align: center;
         }
         .points-breakdown {
             display: flex;
@@ -249,6 +287,25 @@
                     <span class="breakdown-equals">=</span>
                     <span class="breakdown-item" style="color:#667eea;" id="totalCalc">0pt</span>
                 </div>
+                <div class="bonus-section">
+                    <div class="bonus-section-title">連続活動ボーナス（月次）</div>
+                    <table class="bonus-table">
+                        <tr>
+                            <th>連続日数</th>
+                            <th>7日</th>
+                            <th>14日</th>
+                            <th>21日</th>
+                            <th>30日</th>
+                        </tr>
+                        <tr>
+                            <td style="color:#888; font-size:11px;">ボーナス</td>
+                            <td id="b7">+2pt</td>
+                            <td id="b14">+3pt</td>
+                            <td id="b21">+5pt</td>
+                            <td id="b30">+7pt</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
             <div class="card" id="milestoneCard">
@@ -320,6 +377,19 @@
                     document.getElementById("streakBonus").textContent = data.streak_bonus;
                     document.getElementById("activityDays").textContent = "活動日数 " + data.activity_days + "日";
                     document.getElementById("totalCalc").textContent = data.total_points + "pt";
+
+                    // ボーナステーブルのハイライト
+                    var streak = data.current_streak;
+                    var bonusMap = [[30, "b30"], [21, "b21"], [14, "b14"], [7, "b7"]];
+                    for (var b = 0; b < bonusMap.length; b++) {
+                        var el = document.getElementById(bonusMap[b][1]);
+                        if (streak >= bonusMap[b][0]) {
+                            el.style.color = "#667eea";
+                            el.style.fontWeight = "700";
+                            el.style.background = "#f0f2ff";
+                            el.style.borderRadius = "6px";
+                        }
+                    }
 
                     // 割引表示
                     if (data.current_discount > 0) {
