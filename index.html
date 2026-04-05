@@ -236,6 +236,117 @@
             font-size: 14px;
             line-height: 1.6;
         }
+        .guide-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .guide-card h2 {
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .guide-card .guide-icon {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .guide-card .guide-desc {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .guide-steps {
+            list-style: none;
+            padding: 0;
+        }
+        .guide-steps li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .guide-steps li:last-child {
+            border-bottom: none;
+        }
+        .step-num {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .step-content {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.5;
+        }
+        .step-content strong {
+            color: #333;
+        }
+        .guide-contact {
+            margin-top: 16px;
+            padding: 14px;
+            background: #fff3e0;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .guide-contact p {
+            font-size: 13px;
+            color: #e65100;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .guide-noactivity {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .guide-noactivity .check-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .guide-noactivity h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .guide-noactivity p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .activity-list {
+            margin-top: 16px;
+            text-align: left;
+        }
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        .activity-item .activity-emoji {
+            font-size: 20px;
+        }
+        .activity-item .activity-text {
+            font-size: 13px;
+            color: #444;
+        }
     </style>
 </head>
 <body>
@@ -333,9 +444,58 @@
             </div>
         </div>
 
-        <div id="notFound" style="display:none;">
+        <div id="notLinked" style="display:none;">
+            <div class="guide-card">
+                <div class="guide-icon">🔗</div>
+                <h2>LINEとDiscordの連携が必要です</h2>
+                <p class="guide-desc">マイレージを確認するには、LINEアカウントとDiscordアカウントの紐付けが必要です。</p>
+                <ul class="guide-steps">
+                    <li>
+                        <span class="step-num">1</span>
+                        <span class="step-content"><strong>Discordサーバー</strong>に参加しているか確認してください</span>
+                    </li>
+                    <li>
+                        <span class="step-num">2</span>
+                        <span class="step-content">参加済みの場合、<strong>Discordの #不具合連絡・改善要望等</strong> または <strong>LINEで「連携」と送信</strong>して運営にお知らせください</span>
+                    </li>
+                    <li>
+                        <span class="step-num">3</span>
+                        <span class="step-content">運営が紐付けを完了すると、マイレージが確認できるようになります</span>
+                    </li>
+                </ul>
+                <div class="guide-contact">
+                    <p>💡 通常はLINE友だち追加時に自動連携されます。<br>うまくいかない場合は運営までご連絡ください。</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="noActivity" style="display:none;">
+            <div class="guide-card">
+                <div class="guide-noactivity">
+                    <div class="check-icon">✅</div>
+                    <h2>連携完了！</h2>
+                    <p>LINEとDiscordの連携は完了しています。<br>活動を始めるとマイレージが貯まります！</p>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <span class="activity-emoji">🎙️</span>
+                        <span class="activity-text">DiscordのVCに参加する</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-emoji">📝</span>
+                        <span class="activity-text">LINEで朝活宣言を送る（「ます。」で終わるメッセージ）</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-emoji">💬</span>
+                        <span class="activity-text">Discordでチャット投稿する</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorMsg" style="display:none;">
             <div class="card error-msg">
-                <p id="notFoundMsg"></p>
+                <p id="errorText"></p>
             </div>
         </div>
     </div>
@@ -372,8 +532,14 @@
                     document.getElementById("loading").style.display = "none";
 
                     if (!data.found) {
-                        document.getElementById("notFoundMsg").textContent = data.message;
-                        document.getElementById("notFound").style.display = "block";
+                        if (data.status === "not_linked") {
+                            document.getElementById("notLinked").style.display = "block";
+                        } else if (data.status === "no_activity") {
+                            document.getElementById("noActivity").style.display = "block";
+                        } else {
+                            document.getElementById("errorText").textContent = data.message || "データの取得に失敗しました。";
+                            document.getElementById("errorMsg").style.display = "block";
+                        }
                         return;
                     }
 
@@ -447,8 +613,8 @@
 
         function showError(msg) {
             document.getElementById("loading").style.display = "none";
-            document.getElementById("notFoundMsg").textContent = msg;
-            document.getElementById("notFound").style.display = "block";
+            document.getElementById("errorText").textContent = msg;
+            document.getElementById("errorMsg").style.display = "block";
         }
     </script>
 </body>
