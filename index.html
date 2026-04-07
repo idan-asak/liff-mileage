@@ -727,14 +727,16 @@
             fetch(API_BASE + "/api/honki/status?line_user_id=" + encodeURIComponent(lineUserId))
                 .then(function (res) { return res.json(); })
                 .then(function (data) {
-                    if (data.registered && data.reg_status === "active") {
+                    // 今週アクティブなチャレンジがある → 進捗表示
+                    if (data.challenge && data.challenge.status === "active") {
                         showHonkiStatus(data);
                     } else {
-                        showHonkiPromo();
+                        // 今週未参加 → 決済ボタン（過去実績があればそれも表示）
+                        showHonkiPromo(data);
                     }
                 })
                 .catch(function () {
-                    showHonkiPromo();
+                    showHonkiPromo(null);
                 });
         }
 
@@ -760,8 +762,12 @@
             document.getElementById("honkiLosses").textContent = data.losses || 0;
         }
 
-        function showHonkiPromo() {
+        function showHonkiPromo(data) {
             document.getElementById("honkiPromoCard").style.display = "block";
+            // 過去実績がある場合はボタンテキストを変える
+            if (data && (data.wins > 0 || data.losses > 0)) {
+                document.getElementById("honkiStartBtn").textContent = "\u4ECA\u9031\u3082\u53C2\u52A0\u3059\u308B";
+            }
             setupHonkiButtons();
         }
 
