@@ -455,6 +455,87 @@
                     <p class="milestone-remaining">あと <strong id="remaining">0</strong> pt</p>
                 </div>
             </div>
+
+            <!-- 本気モード: 登録済みの場合の進捗表示 -->
+            <div class="card" id="honkiStatusCard" style="display:none;">
+                <div class="card-header">
+                    <h1>💪 本気モード</h1>
+                </div>
+                <div style="text-align:center; padding:8px 0;">
+                    <div style="font-size:28px; letter-spacing:4px;" id="honkiProgress"></div>
+                    <p style="font-size:16px; font-weight:700; color:#333; margin-top:8px;">
+                        <span id="honkiDaysText"></span>
+                    </p>
+                    <p style="font-size:13px; color:#888; margin-top:4px;" id="honkiWeekInfo"></p>
+                    <p style="font-size:13px; color:#888; margin-top:2px;" id="honkiTrialTag"></p>
+                </div>
+                <div style="display:flex; justify-content:center; gap:16px; margin-top:12px;">
+                    <div style="text-align:center;">
+                        <div style="font-size:20px; font-weight:700; color:#333;" id="honkiWins">0</div>
+                        <div style="font-size:11px; color:#888;">達成</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div style="font-size:20px; font-weight:700; color:#333;" id="honkiLosses">0</div>
+                        <div style="font-size:11px; color:#888;">未達</div>
+                    </div>
+                </div>
+                <p style="text-align:center; font-size:12px; color:#aaa; margin-top:12px;">
+                    停止は Discord で <code>/honki stop</code>
+                </p>
+            </div>
+
+            <!-- 本気モード: 未登録の場合の案内 -->
+            <div class="card" id="honkiPromoCard" style="display:none;">
+                <div style="text-align:center; padding:8px 0;">
+                    <div style="font-size:36px;">🔥</div>
+                    <h2 style="font-size:18px; color:#333; margin:8px 0;">本気モード</h2>
+                    <p style="font-size:14px; color:#666; line-height:1.6;">
+                        掛金を自分に課して、朝活にコミットする仕組みです。
+                    </p>
+                </div>
+                <div style="background:#f8f9ff; border-radius:12px; padding:16px; margin:16px 0;">
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                        <span style="font-size:20px;">📋</span>
+                        <span style="font-size:13px; color:#444;">毎週の目標日数を設定（3〜7日）</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                        <span style="font-size:20px;">⏰</span>
+                        <span style="font-size:13px; color:#444;">10:00までの朝活が判定対象</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                        <span style="font-size:20px;">✅</span>
+                        <span style="font-size:13px; color:#444;">達成 → <strong>全額返金</strong></span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:20px;">💸</span>
+                        <span style="font-size:13px; color:#444;">未達 → 没収（自分への投資）</span>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-bottom:12px;">
+                    <p style="font-size:13px; color:#888;">掛金を選択してください</p>
+                </div>
+                <div style="display:flex; gap:8px; margin-bottom:12px;" id="honkiTierBtns">
+                    <button class="honki-tier-btn" data-tier="500" style="flex:1; padding:12px 0; border:2px solid #e0e0e0; border-radius:10px; background:white; font-size:14px; font-weight:600; color:#333; cursor:pointer;">500円</button>
+                    <button class="honki-tier-btn honki-tier-selected" data-tier="1000" style="flex:1; padding:12px 0; border:2px solid #667eea; border-radius:10px; background:#f0f2ff; font-size:14px; font-weight:600; color:#667eea; cursor:pointer;">1,000円</button>
+                    <button class="honki-tier-btn" data-tier="2000" style="flex:1; padding:12px 0; border:2px solid #e0e0e0; border-radius:10px; background:white; font-size:14px; font-weight:600; color:#333; cursor:pointer;">2,000円</button>
+                </div>
+                <div style="text-align:center; margin-bottom:12px;">
+                    <p style="font-size:13px; color:#888;">週の目標日数</p>
+                </div>
+                <div style="display:flex; gap:6px; margin-bottom:16px;" id="honkiDaysBtns">
+                    <button class="honki-days-btn" data-days="3" style="flex:1; padding:10px 0; border:2px solid #e0e0e0; border-radius:10px; background:white; font-size:14px; font-weight:600; color:#333; cursor:pointer;">3日</button>
+                    <button class="honki-days-btn" data-days="4" style="flex:1; padding:10px 0; border:2px solid #e0e0e0; border-radius:10px; background:white; font-size:14px; font-weight:600; color:#333; cursor:pointer;">4日</button>
+                    <button class="honki-days-btn honki-days-selected" data-days="5" style="flex:1; padding:10px 0; border:2px solid #667eea; border-radius:10px; background:#f0f2ff; font-size:14px; font-weight:600; color:#667eea; cursor:pointer;">5日</button>
+                    <button class="honki-days-btn" data-days="6" style="flex:1; padding:10px 0; border:2px solid #e0e0e0; border-radius:10px; background:white; font-size:14px; font-weight:600; color:#333; cursor:pointer;">6日</button>
+                    <button class="honki-days-btn" data-days="7" style="flex:1; padding:10px 0; border:2px solid #e0e0e0; border-radius:10px; background:white; font-size:14px; font-weight:600; color:#333; cursor:pointer;">7日</button>
+                </div>
+                <button id="honkiStartBtn" style="width:100%; padding:14px; background:linear-gradient(135deg, #FF6B35 0%, #F7C948 100%); color:white; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; letter-spacing:1px;">
+                    本気モードを始める
+                </button>
+                <p style="text-align:center; font-size:11px; color:#aaa; margin-top:8px;">
+                    決済ページに移動します
+                </p>
+            </div>
         </div>
 
         <div id="notLinked" style="display:none;">
@@ -620,6 +701,9 @@
                     } else {
                         document.getElementById("milestoneCard").style.display = "none";
                     }
+
+                    // 本気モード情報を取得
+                    fetchHonkiStatus(lineUserId);
                 })
                 .catch(function (err) {
                     console.error("API error:", err);
@@ -631,6 +715,119 @@
             document.getElementById("loading").style.display = "none";
             document.getElementById("errorText").textContent = msg;
             document.getElementById("errorMsg").style.display = "block";
+        }
+
+        // ── 本気モード ──
+        var _lineUserId = null;
+        var _honkiTier = 1000;
+        var _honkiDays = 5;
+
+        function fetchHonkiStatus(lineUserId) {
+            _lineUserId = lineUserId;
+            fetch(API_BASE + "/api/honki/status?line_user_id=" + encodeURIComponent(lineUserId))
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (data.registered && data.reg_status === "active") {
+                        showHonkiStatus(data);
+                    } else {
+                        showHonkiPromo();
+                    }
+                })
+                .catch(function () {
+                    showHonkiPromo();
+                });
+        }
+
+        function showHonkiStatus(data) {
+            var card = document.getElementById("honkiStatusCard");
+            card.style.display = "block";
+
+            if (data.challenge) {
+                var ch = data.challenge;
+                var fire = "";
+                for (var i = 0; i < ch.active_days; i++) fire += "\uD83D\uDD25";
+                for (var j = 0; j < Math.max(0, ch.target_days - ch.active_days); j++) fire += "\u2B1C";
+                document.getElementById("honkiProgress").textContent = fire;
+                document.getElementById("honkiDaysText").textContent =
+                    ch.active_days + "/" + ch.target_days + "\u65E5\u9054\u6210";
+                document.getElementById("honkiWeekInfo").textContent =
+                    "\u6B8B\u308A" + ch.remaining_days + "\u65E5 | " + data.tier.toLocaleString() + "\u5186/\u9031";
+                document.getElementById("honkiTrialTag").textContent =
+                    ch.is_trial ? "\uFF08\u304A\u8A66\u3057\u4E2D\uFF09" : "";
+            }
+
+            document.getElementById("honkiWins").textContent = data.wins || 0;
+            document.getElementById("honkiLosses").textContent = data.losses || 0;
+        }
+
+        function showHonkiPromo() {
+            document.getElementById("honkiPromoCard").style.display = "block";
+            setupHonkiButtons();
+        }
+
+        function setupHonkiButtons() {
+            // 掛金選択
+            var tierBtns = document.querySelectorAll(".honki-tier-btn");
+            tierBtns.forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    tierBtns.forEach(function (b) {
+                        b.style.border = "2px solid #e0e0e0";
+                        b.style.background = "white";
+                        b.style.color = "#333";
+                    });
+                    btn.style.border = "2px solid #667eea";
+                    btn.style.background = "#f0f2ff";
+                    btn.style.color = "#667eea";
+                    _honkiTier = parseInt(btn.getAttribute("data-tier"));
+                });
+            });
+
+            // 日数選択
+            var daysBtns = document.querySelectorAll(".honki-days-btn");
+            daysBtns.forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    daysBtns.forEach(function (b) {
+                        b.style.border = "2px solid #e0e0e0";
+                        b.style.background = "white";
+                        b.style.color = "#333";
+                    });
+                    btn.style.border = "2px solid #667eea";
+                    btn.style.background = "#f0f2ff";
+                    btn.style.color = "#667eea";
+                    _honkiDays = parseInt(btn.getAttribute("data-days"));
+                });
+            });
+
+            // 始めるボタン
+            document.getElementById("honkiStartBtn").addEventListener("click", function () {
+                var btn = this;
+                btn.disabled = true;
+                btn.textContent = "\u51E6\u7406\u4E2D...";
+
+                fetch(API_BASE + "/api/honki/checkout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        line_user_id: _lineUserId,
+                        tier: _honkiTier,
+                        target_days: _honkiDays,
+                    }),
+                })
+                .then(function (res) {
+                    if (!res.ok) return res.json().then(function (d) { throw new Error(d.detail || "error"); });
+                    return res.json();
+                })
+                .then(function (data) {
+                    if (data.checkout_url) {
+                        window.location.href = data.checkout_url;
+                    }
+                })
+                .catch(function (err) {
+                    alert(err.message || "\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F");
+                    btn.disabled = false;
+                    btn.textContent = "\u672C\u6C17\u30E2\u30FC\u30C9\u3092\u59CB\u3081\u308B";
+                });
+            });
         }
     </script>
 </body>
