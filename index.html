@@ -424,6 +424,10 @@
                     <h1>朝活マイレージ</h1>
                     <p id="userName"></p>
                 </div>
+                <div id="goalSection" style="display:none; text-align:center; padding:12px 0 4px; border-bottom:1px solid #eee; margin-bottom:12px;">
+                    <p style="font-size:12px; color:#888; margin-bottom:4px;">あなたの目標</p>
+                    <p style="font-size:16px; color:#333; font-weight:700;" id="goalText"></p>
+                </div>
                 <div class="points-display">
                     <span class="points-number" id="totalPoints">0</span>
                     <span class="points-unit">pt</span>
@@ -754,6 +758,12 @@
                         document.getElementById("progressFill").style.width = pct + "%";
                     } else {
                         document.getElementById("milestoneCard").style.display = "none";
+                    }
+
+                    // 目標表示
+                    if (data.goal) {
+                        document.getElementById("goalText").textContent = data.goal;
+                        document.getElementById("goalSection").style.display = "block";
                     }
 
                     // 今週の活動カレンダー
