@@ -808,7 +808,9 @@
             // 始めるボタン
             document.getElementById("honkiStartBtn").addEventListener("click", function () {
                 var btn = this;
+                if (btn.disabled) return;
                 btn.disabled = true;
+                btn.style.opacity = "0.6";
                 btn.textContent = "\u51E6\u7406\u4E2D...";
 
                 fetch(API_BASE + "/api/honki/checkout", {
