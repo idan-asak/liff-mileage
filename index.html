@@ -77,6 +77,55 @@
             color: #333;
             font-weight: 600;
         }
+        .weekly-calendar {
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+        }
+        .day-cell {
+            flex: 1;
+            text-align: center;
+        }
+        .day-label {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        .day-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 16px;
+        }
+        .day-icon.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .day-icon.inactive {
+            background: #f0f0f0;
+            color: #ccc;
+        }
+        .day-icon.future {
+            background: transparent;
+            border: 2px dashed #e0e0e0;
+            color: #ddd;
+        }
+        .weekly-summary {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+        .weekly-summary strong {
+            color: #667eea;
+        }
         .points-explain {
             background: #f0f2ff;
             border-radius: 10px;
@@ -385,6 +434,10 @@
                         <span class="streak-fire">🔥</span>
                         <span class="streak-text" id="streakText"></span>
                     </div>
+                </div>
+                <div id="weeklySection" style="display:none;">
+                    <div class="weekly-calendar" id="weeklyCalendar"></div>
+                    <p class="weekly-summary" id="weeklySummary"></p>
                 </div>
             </div>
 
@@ -703,6 +756,11 @@
                         document.getElementById("milestoneCard").style.display = "none";
                     }
 
+                    // 今週の活動カレンダー
+                    if (data.weekly && data.weekly.days) {
+                        renderWeeklyCalendar(data.weekly);
+                    }
+
                     // 本気モード情報を取得
                     fetchHonkiStatus(lineUserId);
                 })
@@ -716,6 +774,27 @@
             document.getElementById("loading").style.display = "none";
             document.getElementById("errorText").textContent = msg;
             document.getElementById("errorMsg").style.display = "block";
+        }
+
+        // ── 今週の活動カレンダー ──
+        function renderWeeklyCalendar(weekly) {
+            var cal = document.getElementById("weeklyCalendar");
+            var html = "";
+            for (var i = 0; i < weekly.days.length; i++) {
+                var d = weekly.days[i];
+                var cls = d.future ? "future" : (d.active ? "active" : "inactive");
+                var icon = d.future ? "・" : (d.active ? "✓" : "−");
+                html += '<div class="day-cell">' +
+                    '<div class="day-label">' + d.label + '</div>' +
+                    '<div class="day-icon ' + cls + '">' + icon + '</div>' +
+                    '</div>';
+            }
+            cal.innerHTML = html;
+
+            var summary = document.getElementById("weeklySummary");
+            summary.innerHTML = "今週 <strong>" + weekly.active_count + "日</strong> 活動";
+
+            document.getElementById("weeklySection").style.display = "block";
         }
 
         // ── 本気モード ──
