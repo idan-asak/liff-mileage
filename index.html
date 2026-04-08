@@ -525,6 +525,7 @@
                     </p>
                     <p style="font-size:13px; color:#888; margin-top:4px;" id="honkiWeekInfo"></p>
                     <p style="font-size:13px; color:#888; margin-top:2px;" id="honkiTrialTag"></p>
+                    <p style="font-size:14px; font-weight:600; margin-top:10px; padding:8px 12px; border-radius:8px; text-align:center; display:none;" id="honkiTodayStatus"></p>
                 </div>
                 <div style="display:flex; justify-content:center; gap:16px; margin-top:12px;">
                     <div style="text-align:center;">
@@ -569,6 +570,11 @@
                         <span style="font-size:13px; color:#444;">未達 → 没収（自分への投資）</span>
                     </div>
                 </div>
+                <p style="font-size:12px; color:#999; text-align:center; line-height:1.7; margin-bottom:16px;">
+                    💡 行動経済学の「損失回避」を活用した仕組みです。<br>
+                    人は「失う痛み」を「得る喜び」の約2倍強く感じるため、<br>
+                    掛金が強力な行動の原動力になります。
+                </p>
                 <div style="text-align:center; margin-bottom:12px;">
                     <p style="font-size:13px; color:#888;">掛金を選択してください</p>
                 </div>
@@ -768,6 +774,7 @@
 
                     // 今週の活動カレンダー
                     if (data.weekly && data.weekly.days) {
+                        _weeklyData = data.weekly;
                         renderWeeklyCalendar(data.weekly);
                     }
 
@@ -809,6 +816,7 @@
 
         // ── 本気モード ──
         var _lineUserId = null;
+        var _weeklyData = null;
         var _honkiTier = 1000;
         var _honkiDays = 5;
 
@@ -850,6 +858,34 @@
 
             document.getElementById("honkiWins").textContent = data.wins || 0;
             document.getElementById("honkiLosses").textContent = data.losses || 0;
+
+            // 今日の活動状態（マイレージ週次カレンダーから取得）
+            if (_weeklyData && _weeklyData.days) {
+                var todayActive = null;
+                for (var k = _weeklyData.days.length - 1; k >= 0; k--) {
+                    if (!_weeklyData.days[k].future) { todayActive = _weeklyData.days[k].active; break; }
+                }
+                if (todayActive !== null) {
+                    var todayEl = document.getElementById("honkiTodayStatus");
+                    var now = new Date();
+                    var jstHour = now.getUTCHours() + 9;
+                    if (jstHour >= 24) jstHour -= 24;
+                    if (todayActive) {
+                        todayEl.textContent = "今日: ✅ カウント済み";
+                        todayEl.style.background = "#e8f5e9";
+                        todayEl.style.color = "#2e7d32";
+                    } else if (jstHour >= 10) {
+                        todayEl.textContent = "今日: ⏰ 未活動（締切済み）";
+                        todayEl.style.background = "#fbe9e7";
+                        todayEl.style.color = "#bf360c";
+                    } else {
+                        todayEl.textContent = "今日: ⏳ まだ活動なし（10:00まで）";
+                        todayEl.style.background = "#fff3e0";
+                        todayEl.style.color = "#e65100";
+                    }
+                    todayEl.style.display = "block";
+                }
+            }
         }
 
         function showHonkiPromo(data) {
