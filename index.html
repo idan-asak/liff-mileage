@@ -659,6 +659,33 @@
                 <p id="errorText"></p>
             </div>
         </div>
+
+        <!-- スポットユーザー用表示 -->
+        <div id="spotContent" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h1>朝活リスタート</h1>
+                    <p id="spotPeriod"></p>
+                </div>
+                <div id="spotDays" style="display:flex; justify-content:center; gap:8px; margin:20px 0;"></div>
+                <div style="text-align:center; margin-top:12px;">
+                    <span style="font-size:32px; font-weight:700; color:#0096C7;" id="spotAchieved">0</span>
+                    <span style="font-size:18px; color:#0096C7;"> / 7日 達成</span>
+                </div>
+            </div>
+            <div class="card">
+                <div style="text-align:center;">
+                    <p style="font-size:13px; color:#888; margin-bottom:4px;">累計マイレージ</p>
+                    <span style="font-size:40px; font-weight:700; color:#667eea;" id="spotTotalPt">0</span>
+                    <span style="font-size:16px; color:#667eea;">pt</span>
+                </div>
+                <div style="background:#f0f2ff; border-radius:10px; padding:12px; margin-top:16px; text-align:center;">
+                    <p style="font-size:12px; color:#666; line-height:1.6; margin:0;">
+                        コミュニティに入会すると<br>マイレージを<strong style="color:#667eea;">割引</strong>に使えます
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
@@ -693,14 +720,8 @@
                     document.getElementById("loading").style.display = "none";
 
                     if (!data.found) {
-                        if (data.status === "not_linked") {
-                            document.getElementById("notLinked").style.display = "block";
-                        } else if (data.status === "no_activity") {
-                            document.getElementById("noActivity").style.display = "block";
-                        } else {
-                            document.getElementById("errorText").textContent = data.message || "データの取得に失敗しました。";
-                            document.getElementById("errorMsg").style.display = "block";
-                        }
+                        // コミュニティ会員でない場合、スポットユーザーかチェック
+                        fetchSpotMileage(lineUserId, data.status);
                         return;
                     }
 
@@ -784,6 +805,69 @@
                 .catch(function (err) {
                     console.error("API error:", err);
                     showError("データの取得に失敗しました。しばらくしてからお試しください。");
+                });
+        }
+
+        function fetchSpotMileage(lineUserId, communityStatus) {
+            fetch(API_BASE + "/api/spot/mileage?line_user_id=" + encodeURIComponent(lineUserId))
+                .then(function (res) { return res.json(); })
+                .then(function (spot) {
+                    if (spot.total_points > 0 || spot.active_spot) {
+                        // スポットユーザー: スポット用表示
+                        document.getElementById("loading").style.display = "none";
+                        document.getElementById("spotContent").style.display = "block";
+                        document.getElementById("spotTotalPt").textContent = spot.total_points;
+
+                        if (spot.active_spot) {
+                            var s = spot.active_spot;
+                            var startParts = s.start_date.split("-");
+                            var endParts = s.end_date.split("-");
+                            document.getElementById("spotPeriod").textContent =
+                                parseInt(startParts[1]) + "/" + parseInt(startParts[2]) + " 〜 " +
+                                parseInt(endParts[1]) + "/" + parseInt(endParts[2]) + "（" + s.wake_time + "〜）";
+
+                            var daysHtml = "";
+                            var achieved = 0;
+                            for (var i = 0; i < s.days.length; i++) {
+                                var d = s.days[i];
+                                var today = new Date().toISOString().split("T")[0];
+                                var isFuture = d.date > today;
+                                if (d.reported) {
+                                    daysHtml += '<div style="width:36px;height:36px;border-radius:50%;background:#0096C7;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;">' + d.day + '</div>';
+                                    achieved++;
+                                } else if (isFuture) {
+                                    daysHtml += '<div style="width:36px;height:36px;border-radius:50%;border:2px dashed #ddd;color:#ccc;display:flex;align-items:center;justify-content:center;font-size:14px;">' + d.day + '</div>';
+                                } else {
+                                    daysHtml += '<div style="width:36px;height:36px;border-radius:50%;background:#f0f0f0;color:#999;display:flex;align-items:center;justify-content:center;font-size:14px;">' + d.day + '</div>';
+                                }
+                            }
+                            document.getElementById("spotDays").innerHTML = daysHtml;
+                            document.getElementById("spotAchieved").textContent = achieved;
+                        } else {
+                            document.getElementById("spotPeriod").textContent = "利用履歴";
+                        }
+                    } else {
+                        // スポットでもない → 元のコミュニティ用エラー表示
+                        document.getElementById("loading").style.display = "none";
+                        if (communityStatus === "not_linked") {
+                            document.getElementById("notLinked").style.display = "block";
+                        } else if (communityStatus === "no_activity") {
+                            document.getElementById("noActivity").style.display = "block";
+                        } else {
+                            showError("データの取得に失敗しました。");
+                        }
+                    }
+                })
+                .catch(function () {
+                    // スポットAPI失敗 → 元のコミュニティ用エラー表示
+                    document.getElementById("loading").style.display = "none";
+                    if (communityStatus === "not_linked") {
+                        document.getElementById("notLinked").style.display = "block";
+                    } else if (communityStatus === "no_activity") {
+                        document.getElementById("noActivity").style.display = "block";
+                    } else {
+                        showError("データの取得に失敗しました。");
+                    }
                 });
         }
 
