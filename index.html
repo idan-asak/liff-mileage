@@ -660,41 +660,50 @@
             </div>
         </div>
 
-        <!-- スポットユーザー用表示 -->
+        <!-- スポットユーザー用マイレージ表示 -->
         <div id="spotContent" style="display:none;">
+            <!-- ポイント表示 -->
             <div class="card">
                 <div class="card-header">
-                    <h1>朝活リスタート</h1>
+                    <h1>朝活マイレージ</h1>
                     <p id="spotPeriod"></p>
                 </div>
-                <div id="spotDays" style="display:flex; justify-content:center; gap:8px; margin:20px 0;"></div>
-                <div style="text-align:center; margin-top:12px;">
-                    <span style="font-size:32px; font-weight:700; color:#0096C7;" id="spotAchieved">0</span>
-                    <span style="font-size:18px; color:#0096C7;"> / 7日 達成</span>
+                <div class="points-display">
+                    <span class="points-number" id="spotTotalPt">0</span>
+                    <span class="points-unit">pt</span>
+                </div>
+                <!-- 今回の進捗 -->
+                <div id="spotDays" style="display:flex; justify-content:center; gap:8px; margin:8px 0 4px;"></div>
+                <div style="text-align:center; margin-top:8px;">
+                    <span style="font-size:14px; color:#667eea; font-weight:600;" id="spotAchievedText"></span>
                 </div>
             </div>
+            <!-- マイレージの仕組み -->
             <div class="card">
-                <div style="text-align:center;">
-                    <p style="font-size:13px; color:#888; margin-bottom:4px;">累計マイレージ</p>
-                    <span style="font-size:40px; font-weight:700; color:#667eea;" id="spotTotalPt">0</span>
-                    <span style="font-size:16px; color:#667eea;">pt</span>
+                <div style="text-align:center; margin-bottom:12px;">
+                    <p style="font-size:15px; font-weight:700; color:#333;">マイレージの仕組み</p>
                 </div>
-                <div style="background:#f0f2ff; border-radius:10px; padding:12px; margin-top:16px; text-align:center;">
-                    <p style="font-size:12px; color:#666; line-height:1.6; margin:0;">
-                        コミュニティに入会すると<br>マイレージを<strong style="color:#667eea;">割引</strong>に使えます
-                    </p>
+                <div style="font-size:13px; color:#555; line-height:1.8;">
+                    <p style="margin:0 0 10px;">朝活を報告すると<strong style="color:#667eea;">1日1ポイント</strong>貯まります。</p>
+                    <p style="margin:0 0 10px;">コミュニティ（月額¥1,000）に入会すると、ポイントに応じて<strong style="color:#667eea;">月額が永年割引</strong>されます。</p>
+                    <div style="background:#f8f9ff; border-radius:8px; padding:10px 12px; margin-top:8px;">
+                        <p style="font-size:12px; color:#888; margin:0 0 6px; text-align:center;">割引テーブル</p>
+                        <div style="display:flex; justify-content:space-around; font-size:12px; color:#555;">
+                            <div style="text-align:center;"><div style="font-weight:700; color:#667eea;">30pt</div><div>-50円</div></div>
+                            <div style="text-align:center;"><div style="font-weight:700; color:#667eea;">120pt</div><div>-200円</div></div>
+                            <div style="text-align:center;"><div style="font-weight:700; color:#667eea;">500pt</div><div>-500円</div></div>
+                            <div style="text-align:center;"><div style="font-weight:700; color:#f5576c;">1500pt</div><div>実質無料</div></div>
+                        </div>
+                    </div>
+                    <p style="font-size:11px; color:#999; margin-top:10px; text-align:center;">ポイントは入会時にそのまま引き継がれます</p>
                 </div>
             </div>
-            <!-- 朝活リスタート案内（スポットユーザー向け・本気モードの代替） -->
+            <!-- 朝活リスタート再購入 -->
             <div class="card">
-                <div style="text-align:center; padding:8px 0;">
-                    <p style="font-size:14px; color:#888; margin-bottom:8px;">また崩れたときは</p>
-                    <h2 style="font-size:20px; color:#333; margin:0 0 8px;">朝活リスタート</h2>
-                    <p style="font-size:13px; color:#666; line-height:1.6; margin-bottom:16px;">
-                        7日間のチャットサポートで<br>朝活を立て直します
-                    </p>
+                <div style="text-align:center; padding:4px 0;">
+                    <p style="font-size:13px; color:#888; margin-bottom:12px;">また崩れたときはいつでも</p>
                     <a href="https://asa-plant.com/restart/" style="display:inline-block; padding:12px 32px; background:linear-gradient(135deg, #0096C7, #48CAE4); color:white; border-radius:10px; font-size:15px; font-weight:600; text-decoration:none;">
-                        もう一度購入する
+                        朝活リスタートを購入する
                     </a>
                 </div>
             </div>
@@ -877,7 +886,7 @@
                     }
                 }
                 document.getElementById("spotDays").innerHTML = daysHtml;
-                document.getElementById("spotAchieved").textContent = achieved;
+                document.getElementById("spotAchievedText").textContent = "今回 " + achieved + " / 7日 達成";
             } else {
                 document.getElementById("spotPeriod").textContent = "利用履歴";
             }
